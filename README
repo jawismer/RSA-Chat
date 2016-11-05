@@ -1,0 +1,79 @@
+RSA Chat
+--------
+
+Commands to run:
+----------------
+	Generate keys: MPRIME=<mth prime to calculate> NPRIME=<nth prime> make genkey
+	Key Cracker: E=<E value> C=<C value> make keycrack
+	Start chat server: PORT=<port> E=<E value> C=<C value> D=<D value> DC=<C value> make server
+	Start chat client: SERVER=<server host> PORT=<port> E=<E value> C=<C value> D=<D value> DC=<C value> make client
+
+Sample output:
+--------------
+
+w382@tux64-14:~/CS283/A3$ MPRIME=8 NPRIME=13 make genkey
+gcc genkey.c -o genkey.out -lm
+./genkey.out 8 13
+8th prime = 23
+13th prime = 43
+c = 989
+m = 924
+e = 5
+d = 185
+Public Key: (5, 989) 
+Private Key: (185, 989)
+
+jaw382@tux64-14:~/CS283/A3$ E=5 C=989 make keycrack
+gcc keycrack.c -o keycrack.out -lm
+./keycrack.out 5 989
+Prime factors: a=23, b=43
+c = 989
+m = 924
+e = 5
+d = 185
+Public Key: (5, 989) 
+Private Key: (185, 989)
+
+jaw382@tux64-14:~/CS283/A3$ SERVER=tux64-14.cs.drexel.edu PORT=12345 E=5 C=989 D=185 DC=989 make client
+gcc -pthread client.c csapp.c -o client.out -lm -g
+./client.out tux64-14.cs.drexel.edu 12345 5 989 185 989
+Enter message to encrypt: This is a test.
+398
+363
+73
+966
+629
+73
+966
+629
+618
+629
+829
+468
+966
+829
+759
+111
+
+jaw382@tux64-14:~/CS283/A3$ PORT=12345 E=4 C=989 D=185 DC=989 make server
+gcc -pthread server.c csapp.c -o server.out -lm -g
+./server.out 12345 4 989 185 989
+Client: New message incoming
+Client: 398
+Client: 363
+Client: 73
+Client: 966
+Client: 629
+Client: 73
+Client: 966
+Client: 629
+Client: 618
+Client: 629
+Client: 829
+Client: 468
+Client: 966
+Client: 829
+Client: 759
+Client: 111
+Client: End of message
+Decrypted message: This is a test.
